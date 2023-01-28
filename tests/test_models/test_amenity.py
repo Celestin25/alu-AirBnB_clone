@@ -1,26 +1,35 @@
 #!/usr/bin/python3
-"""
-    Contains the definition of tests for class Amenity
-"""
+
+"""Unittest for Amenity Class."""
+
 import unittest
+
 from models.amenity import Amenity
 
+from models.base_model import BaseModel
 
-class TestAmenityMethods(unittest.TestCase):
-    """Definition of tests for class Amenity"""
+class TestAmenity(unittest.TestCase):
+"""Test cases for Amenity class."""
+def test_instance(self):
+    """test instance."""
+    test_amenity = Amenity()
+    self.assertIsInstance(test_amenity, Amenity)
 
-    def test_attributes_exist(self):
-        """Test that class Amenity has the required attributes and methods"""
-        self.assertTrue(hasattr(Amenity, 'name'))
+def test_is_class(self):
+    """test instance."""
+    test_amenity = Amenity()
+    self.assertEqual(str(type(test_amenity)),
+                     "<class 'models.amenity.Amenity'>")
 
-    def test_Amenity_attributes(self):
-        """
-           Test whether the attributes of
-           class Amenity are of the right type
-        """
-        amenity_1 = Amenity()
-        self.assertIsInstance(amenity_1.name, str)
+def test_is_subclass(self):
+    """test is_subclass."""
+    test_amenity = Amenity()
+    self.assertTrue(issubclass(type(test_amenity), BaseModel))
 
-
-if __name__ == '__main__':
-    unittest.main()
+def test_attr(self):
+    """test is_subclass."""
+    test_amenity = Amenity()
+    self.assertEqual(test_amenity.name, "")
+    self.assertIsNotNone(test_amenity.id)
+    if name == "main":
+unittest.main()
