@@ -1,43 +1,54 @@
 #!/usr/bin/python3
-"""
-    Contains the definition of tests for class Place
-"""
+
+"""Unit tests for Place class"""
+
 import unittest
-from models.place import Place
+
+from place_model import Place
+from city_model import City
+from user_model import User
+
+from base_model import BaseModel
 
 
 class TestPlaceMethods(unittest.TestCase):
-    """Definition of tests for class Place"""
+    """Test cases for Place class"""
 
-    def test_attributes_exist(self):
-        """Test that class Place has the required attributes and methods"""
-        self.assertTrue(hasattr(Place, 'city_id'))
-        self.assertTrue(hasattr(Place, 'user_id'))
-        self.assertTrue(hasattr(Place, 'name'))
-        self.assertTrue(hasattr(Place, 'description'))
-        self.assertTrue(hasattr(Place, 'number_rooms'))
-        self.assertTrue(hasattr(Place, 'number_bathrooms'))
-        self.assertTrue(hasattr(Place, 'max_guest'))
-        self.assertTrue(hasattr(Place, 'price_by_night'))
-        self.assertTrue(hasattr(Place, 'latitude'))
-        self.assertTrue(hasattr(Place, 'longitude'))
-        self.assertTrue(hasattr(Place, 'amenity_ids'))
+    def test_place_instance(self):
+        """Test creating an instance of Place"""
+        test_place = Place()
+        self.assertIsInstance(test_place, Place)
 
-    def test_Place_attributes(self):
-        """Test whether the attributes of class Place are of the right type"""
-        place_1 = Place()
-        self.assertIsInstance(place_1.city_id, str)
-        self.assertIsInstance(place_1.user_id, str)
-        self.assertIsInstance(place_1.name, str)
-        self.assertIsInstance(place_1.description, str)
-        self.assertIsInstance(place_1.number_rooms, int)
-        self.assertIsInstance(place_1.number_bathrooms, int)
-        self.assertIsInstance(place_1.max_guest, int)
-        self.assertIsInstance(place_1.price_by_night, int)
-        self.assertIsInstance(place_1.latitude, float)
-        self.assertIsInstance(place_1.longitude, float)
-        self.assertIsInstance(place_1.amenity_ids, list)
+    def test_place_class(self):
+        """Test if the instance is of the Place class"""
+        test_place = Place()
+        self.assertEqual(str(type(test_place)), "<class 'place_model.Place'>")
+
+    def test_place_subclass(self):
+        """Test if Place is a subclass of BaseModel"""
+        test_place = Place()
+        self.assertTrue(issubclass(type(test_place), BaseModel))
+
+    def test_place_attributes(self):
+        """Test place attributes"""
+        test_city = City()
+        test_user = User()
+        test_place = Place()
+        test_place.user_id = test_user.id
+        test_place.city_id = test_city.id
+        self.assertIsNotNone(test_place.id)
+        self.assertEqual(test_place.user_id, test_user.id)
+        self.assertEqual(test_place.city_id, test_city.id)
+        self.assertEqual(test_place.name, "")
+        self.assertEqual(test_place.description, "")
+        self.assertEqual(test_place.number_rooms, 0)
+        self.assertEqual(test_place.number_bathrooms, 0)
+        self.assertEqual(test_place.max_guest, 0)
+        self.assertEqual(test_place.price_by_night, 0)
+        self.assertEqual(test_place.latitude, 0)
+        self.assertEqual(test_place.longitude, 0)
+        self.assertEqual(test_place.amenity_ids, [])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
