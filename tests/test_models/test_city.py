@@ -1,25 +1,38 @@
 #!/usr/bin/python3
-"""
-    Contains the definition of tests for class City
-"""
+
+"""Unit test for City class."""
+
 import unittest
+
 from models.city import City
 
+from models.base_model import BaseModel
 
-class TestCityMethods(unittest.TestCase):
-    """Definition of tests for class City"""
+class VerifyCity(unittest.TestCase):
+"""Test cases for City class."""
+def test_is_instance(self):
+    """Check if the city is an instance of City."""
+    city = City()
+    self.assertIsInstance(city, City)
 
-    def test_attributes_exist(self):
-        """Test that class City has the required attributes"""
-        self.assertTrue(hasattr(City, 'name'))
-        self.assertTrue(hasattr(City, 'state_id'))
+def test_type(self):
+    """Verify that city is of the correct class type."""
+    city = City()
+    self.assertEqual(str(type(city)), "<class 'models.city.City'>")
 
-    def test_City_attributes(self):
-        """Test whether the attributes of class City are of the right type"""
-        city_1 = City()
-        self.assertIsInstance(city_1.name, str)
-        self.assertIsInstance(city_1.state_id, str)
+def test_is_subclass(self):
+    """Check if the city is a subclass of BaseModel."""
+    city = City()
+    self.assertTrue(issubclass(type(city), BaseModel))
 
+def test_name_attribute(self):
+    """Check if the city's name attribute is empty string."""
+    city = City()
+    self.assertEqual(city.name, "")
 
-if __name__ == '__main__':
-    unittest.main()
+def test_state_id_attribute(self):
+    """Check if the city's state_id attribute is empty string."""
+    city = City()
+    self.assertEqual(city.state_id, "")
+    if name == "main":
+unittest.main()
