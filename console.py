@@ -1,81 +1,157 @@
 #!/usr/bin/python3
 """
-This module contains the hbnb class for the command interpreter.
+That is the 'console' module.
+Console carries the 'hbnb' magnificence, which inherits from the 'cmd.Cmd' magnificence.
+This consists of the entry point for the command interpreter.
 """
-import cmd
-import sys
-import models
+Import cmd
+Import sys
+Import fashions
 
-class hbnb(cmd.Cmd):
-"""
-hbnb class inherits from cmd.Cmd and contains the following variables and methods:
-- prompt: the prompt for the command interpreter
-- obj: all objects stored in the storage
-- errors: a dictionary of error messages
-- new_class: list of new class types
-- do_quit: quits the program
-- do_EOF: exits the program
-- emptyline: prevents repetition of previous input
-- do_create: creates a new instance and saves it to the JSON file
-- do_show: prints the string representation of an instance
-- do_destroy: deletes an instance based on its class and ID
-- do_all: prints string representation of all instances based on class
-"""
-prompt = '(hbnb) '
-obj = models.storage.all()
-errors = {
-"badid": "** no instance found ",
-"noid": " instance id missing ",
-"badclass": " class doesn't exist ",
-"noclass": " class name missing ",
-"novalue": " value missing ",
-"noattr": " attribute name missing **"
-}
-new_class = ['BaseModel', 'Amenity', 'City', 'Place', 'Review',
-'State', 'User']
-def do_quit(self, args):
-    '''Quits the program.'''
-    return True
 
-def do_EOF(self, args):
-    '''Exits the program.'''
-    return True
+Magnificence hbnb(cmd.Cmd):
+    """that is the 'hbnb' class.
+    Hbnb incorporates the variable 'spark off'. It also consists of eight techniques:
+    'end', 'EOF', 'emptyLine', 'create', 'show', ruin',
+    'all', 'update'.
+    """
+    prompt = '(hbnb) '
+    obj = models.Garage.All()
+    errors = 
+        "badid": "** no example found **",
+        "noid": "** example identification lacking **",
+        "badclass": "** class doesn't exist **",
+        "noclass": "** class name missing **",
+        "novalue": "** fee missing **",
+        "noattr": "** attribute call missing **"
+    
+    new_class = ['BaseModel', 'Amenity', 'City', 'Place', 'Review',
+                 'State', 'User']
 
-def emptyline(self):
-    '''Prevents repetition of previous input.'''
-    pass
+    def do_quit(self, arg):
+        '''stop command to go out the program.'''
+        go back actual
 
-def do_create(self, args):
-    '''Creates a new instance and saves it to the JSON file.'''
-    args = args.split()
-    if len(args) < 1:
-        print(self.errors['noclass'])
-        return
-    class_name = args[0]
-    if class_name not in self.new_class:
-        print(self.errors['badclass'])
-        return
-    new_obj = None
-    if class_name == 'BaseModel':
-        new_obj = models.BaseModel()
-    elif class_name == 'Amenity':
-        new_obj = models.Amenity()
-    elif class_name == 'City':
-        new_obj = models.City()
-    elif class_name == 'Place':
-        new_obj = models.Place()
-    elif class_name == 'Review':
-        new_obj = models.Review()
-    elif class_name == 'State':
-        new_obj = models.State()
-    elif class_name == 'User':
-        new_obj = models.User()
-    new_obj.save()
-    print('{}'.format(new_obj.id))
+    def do_EOF(self, arg):
+        '''Exits this system.'''
+        return authentic
 
-def do_show(self, args):
-    '''Prints the string representation of an instance.'''
-    args = args.split()
-    if len(args) < 1:
-        print(self.errors['noclass'])
-        return
+    def emptyline(self):
+        '''Prevents repeat of preceding input.'''
+        skip
+
+    def do_create(self, arg):
+        '''Creates a brand new example of BaseModel, keep to JSON file.'''
+        args = arg.Split()
+        if len(args) < 1:
+            print(self.Errors['noclass'])
+        elif args[0] in self.New_class:
+            if args[0] == 'BaseModel':
+                new = fashions.BaseModel()
+            if args[0] == 'Amenity':
+                new = models.Amenity()
+            if args[0] == 'metropolis':
+                new = fashions.City()
+            if args[0] == 'region':
+                new = fashions.Area()
+            if args[0] == 'review':
+                new = fashions.Evaluation()
+            if args[0] == 'state':
+                new = fashions.Kingdom()
+            if args[0] == 'user':
+                new = fashions.Person()
+            new.Save()
+            print(''.Layout(new.Id))
+        else:
+            print(self.Mistakes['badclass'])
+
+    def do_show(self, arg):
+        '''Prints the string illustration of an instance'''
+        args = arg.Cut up()
+
+        if (len(args) == 0):
+            print(self.Mistakes['noclass'])
+        elif args[0] now not in self.New_class:
+            print(self.Errors['badclass'])
+        elif (len(args) < 2):
+            print(self.Mistakes['noid'])
+        else:
+            if args[0] in self.New_class:
+                fashions.Garage.Reload()
+                new_dict = fashions.Garage.All()
+                if args[1] now not in new_dict:
+                    print(self.Errors['badid'])
+                for key in new_dict:
+                    if args[0] in str(new_dict[key]):
+                        if args[1] in new_dict.Keys():
+                            print(new_dict[args[1]])
+                            destroy
+
+    def do_destroy(self, arg):
+        '''Deletes an instance based totally on the elegance name and identification,'''
+        args = arg.Break up()
+
+        if (len(args) == 0):
+            print(self.Errors['noclass'])
+        elif args[0] not in self.New_class:
+            print(self.Mistakes['badclass'])
+        elif (len(args) < 2):
+            print(self.Errors['noid'])
+        else:
+            if args[0] in self.New_class:
+                models.Storage.Reload()
+                new_dict = models.Storage.All()
+                if args[1] not in new_dict:
+                    print(self.Errors['badid'])
+                else:
+                    if args[1] in new_dict.Keys():
+                        if args[0] in str(new_dict[args[1]]):
+                            del new_dict[args[1]]
+                            models.Storage.Save()
+
+    def do_all(self, arg):
+        '''Prints string representation of all instances based on class'''
+        our_list = []
+        args = arg.Split()
+
+        if len(args) > 0:
+            if args[0] in self.New_class:
+                for i in self.Obj.Keys():
+                    if self.Obj[i].__class__.__name__ == args[0]:
+                        our_list.Append(str(self.Obj[i]))
+                print(our_list)
+            else:
+                print(self.Mistakes['badclass'])
+    def do_update(self, arg):
+        '''Updates an example by including or updating characteristic'''
+        args = arg.Break up()
+        new_dict = fashions.Storage.All()
+
+        if len(args) == zero:
+            print(self.Mistakes['noclass'])
+        elif args[0] now not in self.New_class:
+            print(self.Errors['badclass'])
+        elif len(args) < 2:
+            print(self.Mistakes['noid'])
+        elif args[1] not in new_dict:
+            print(self.Mistakes['badid'])
+        elif len(args) < 4 not in self.Obj:
+            print(self.Errors['novalue'])
+        else:
+            class_name = args[0]
+            user_id = args[1]
+            attribute_name = args[2]
+            attribute_value = ""
+            if (len(args) > 4):
+                for i in variety(len(args) - three):
+                    attribute_value += (args[i + 3].Replace('"', ''))
+                    if i < (len(args) - 4):
+                        attribute_value += " "
+            else:
+                attribute_value = args[3].Update('"', '')
+            if class_name in self.New_class:
+                (self.Obj[user_id]).__dict__[attribute_name] = attribute_value
+                fashions.Storage.Shop()
+
+If __name__ == '__main__':
+    hbnb().Cmdloop()
