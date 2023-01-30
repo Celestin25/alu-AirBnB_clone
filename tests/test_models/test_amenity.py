@@ -1,35 +1,34 @@
 #!/usr/bin/python3
-
-"""Unittest for Amenity Class."""
-
 import unittest
-
 from models.amenity import Amenity
+import datetime
 
-from models.base_model import BaseModel
 
 class TestAmenity(unittest.TestCase):
-"""Test cases for Amenity class."""
-def test_instance(self):
-    """test instance."""
-    test_amenity = Amenity()
-    self.assertIsInstance(test_amenity, Amenity)
+    def setUp(self):
+    
+        self.test_model1 = Amenity()
+        self.test_model2 = Amenity()
 
-def test_is_class(self):
-    """test instance."""
-    test_amenity = Amenity()
-    self.assertEqual(str(type(test_amenity)),
-                     "<class 'models.amenity.Amenity'>")
+    def test_basic_setup(self):
 
-def test_is_subclass(self):
-    """test is_subclass."""
-    test_amenity = Amenity()
-    self.assertTrue(issubclass(type(test_amenity), BaseModel))
+        self.assertTrue(hasattr(self.test_model1, "name"))
+        self.assertTrue(self.test_model1.id != self.test_model2.id)
+        m1c = self.test_model1.created_at
+        m2c = self.test_model2.created_at
+        self.assertTrue(m1c != m2c)
+        self.assertTrue(type(m1c) is datetime.datetime)
 
-def test_attr(self):
-    """test is_subclass."""
-    test_amenity = Amenity()
-    self.assertEqual(test_amenity.name, "")
-    self.assertIsNotNone(test_amenity.id)
-    if name == "main":
-unittest.main()
+    def test_types(self):
+    
+        self.assertTrue(type(self.test_model1.name) is str)
+
+    def test_save(self):
+    
+        m1u = self.test_model1.updated_at
+        self.test_model1.save()
+        m1u_saved = self.test_model1.updated_at
+        self.assertFalse(m1u == m1u_saved)
+
+if __name__ == '__main__':
+    unittest.main()
