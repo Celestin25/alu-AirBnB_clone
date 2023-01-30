@@ -1,153 +1,84 @@
 #!/usr/bin/python3
 """
-This is the 'console' module.
-console contains the 'hbnb' class, which inherits from the 'cmd.Cmd' class.
-This contains the entry point for the command interpreter.
+This module contains the 'hbnb' class for the command interpreter.
 """
 import cmd
 import sys
 import models
 
-
 class hbnb(cmd.Cmd):
+"""The 'hbnb' class, derived from 'cmd.Cmd', with the following features:
+- A prompt
+- Eight methods: 'quit', 'EOF', 'emptyLine', 'create', 'show', 'destroy', 'all', 'update'
+- error messages stored in 'errors' dictionary
+- list of available classes in 'new_class'
+"""
+prompt = '(hbnb) '
+obj = models.storage.all()
+errors = {
+"badid": "** no instance found ",
+"noid": " instance id missing ",
+"badclass": " class doesn't exist ",
+"noclass": " class name missing ",
+"novalue": " value missing ",
+"noattr": " attribute name missing **"
+}
+new_class = ['BaseModel', 'Amenity', 'City', 'Place', 'Review',
+'State', 'User']
+def do_quit(self, arg):
+    '''Exit the program.'''
+    return True
 
-    prompt = '(hbnb) '
-    obj = models.storage.all()
-    errors = {
-        "badid": "** no instance found **",
-        "noid": "** instance id missing **",
-        "badclass": "** class doesn't exist **",
-        "noclass": "** class name missing **",
-        "novalue": "** value missing **",
-        "noattr": "** attribute name missing **"
-    }
-    new_class = ['BaseModel', 'Amenity', 'City', 'Place', 'Review',
-                 'State', 'User']
+def do_EOF(self, arg):
+    '''Exit the program.'''
+    return True
 
-    def do_quit(self, arg):
-    
-        return True
+def emptyline(self):
+    '''Avoid repeating previous input.'''
+    pass
 
-    def do_EOF(self, arg):
-    
-        return True
+def do_create(self, arg):
+    '''Create a new instance of specified class and save it to JSON file.'''
+    args = arg.split()
+    if not args:
+        print(self.errors['noclass'])
+    elif args[0] in self.new_class:
+        new = getattr(models, args[0])()
+        new.save()
+        print('{}'.format(new.id))
+    else:
+        print(self.errors['badclass'])
 
-    def emptyline(self):
-        
-        pass
+def do_show(self, arg):
+    '''Show the string representation of an instance with given class and id.'''
+    args = arg.split()
 
-    def do_create(self, arg):
-    
-        args = arg.split()
-        if len(args) < 1:
-            print(self.errors['noclass'])
-        elif args[0] in self.new_class:
-            if args[0] == 'BaseModel':
-                new = models.BaseModel()
-            if args[0] == 'Amenity':
-                new = models.Amenity()
-            if args[0] == 'City':
-                new = models.City()
-            if args[0] == 'Place':
-                new = models.Place()
-            if args[0] == 'Review':
-                new = models.Review()
-            if args[0] == 'State':
-                new = models.State()
-            if args[0] == 'User':
-                new = models.User()
-            new.save()
-            print('{}'.format(new.id))
-        else:
-            print(self.errors['badclass'])
-
-    def do_show(self, arg):
-    
-        args = arg.split()
-
-        if (len(args) == 0):
-            print(self.errors['noclass'])
-        elif args[0] not in self.new_class:
-            print(self.errors['badclass'])
-        elif (len(args) < 2):
-            print(self.errors['noid'])
-        else:
-            if args[0] in self.new_class:
-                models.storage.reload()
-                new_dict = models.storage.all()
-                if args[1] not in new_dict:
-                    print(self.errors['badid'])
-                for key in new_dict:
-                    if args[0] in str(new_dict[key]):
-                        if args[1] in new_dict.keys():
-                            print(new_dict[args[1]])
-                            break
-
-    def do_destroy(self, arg):
-    
-        args = arg.split()
-
-        if (len(args) == 0):
-            print(self.errors['noclass'])
-        elif args[0] not in self.new_class:
-            print(self.errors['badclass'])
-        elif (len(args) < 2):
-            print(self.errors['noid'])
-        else:
-            if args[0] in self.new_class:
-                models.storage.reload()
-                new_dict = models.storage.all()
-                if args[1] not in new_dict:
-                    print(self.errors['badid'])
-                else:
-                    if args[1] in new_dict.keys():
-                        if args[0] in str(new_dict[args[1]]):
-                            del new_dict[args[1]]
-                            models.storage.save()
-
-    def do_all(self, arg):
-    
-        our_list = []
-        args = arg.split()
-
-        if len(args) > 0:
-            if args[0] in self.new_class:
-                for i in self.obj.keys():
-                    if self.obj[i].__class__.__name__ == args[0]:
-                        our_list.append(str(self.obj[i]))
-                print(our_list)
-            else:
-                print(self.errors['badclass'])
-    def do_update(self, arg):
-    
-        args = arg.split()
-        new_dict = models.storage.all()
-
-        if len(args) == 0:
-            print(self.errors['noclass'])
-        elif args[0] not in self.new_class:
-            print(self.errors['badclass'])
-        elif len(args) < 2:
-            print(self.errors['noid'])
-        elif args[1] not in new_dict:
+    if not args:
+        print(self.errors['noclass'])
+    elif args[0] not in self.new_class:
+        print(self.errors['badclass'])
+    elif len(args) < 2:
+        print(self.errors['noid'])
+    else:
+        models.storage.reload()
+        instances = models.storage.all()
+        if args[1] not in instances:
             print(self.errors['badid'])
-        elif len(args) < 4 not in self.obj:
-            print(self.errors['novalue'])
         else:
-            class_name = args[0]
-            user_id = args[1]
-            attribute_name = args[2]
-            attribute_value = ""
-            if (len(args) > 4):
-                for i in range(len(args) - 3):
-                    attribute_value += (args[i + 3].replace('\"', ''))
-                    if i < (len(args) - 4):
-                        attribute_value += " "
-            else:
-                attribute_value = args[3].replace('\"', '')
-            if class_name in self.new_class:
-                (self.obj[user_id]).__dict__[attribute_name] = attribute_value
-                models.storage.save()
+            instance = instances[args[1]]
+            if args[0] in str(instance):
+                print(instance)
 
-if __name__ == '__main__':
-    hbnb().cmdloop()
+def do_destroy(self, arg):
+    '''Delete an instance with given class and id.'''
+    args = arg.split()
+
+    if not args:
+        print(self.errors['noclass'])
+    elif args[0] not in self.new_class:
+        print(self.errors['badclass'])
+    elif len(args) < 2:
+        print(self.errors['noid'])
+    else:
+        models.storage.reload()
+        instances =
