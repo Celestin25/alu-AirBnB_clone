@@ -1,38 +1,32 @@
 #!/usr/bin/python3
-
-"""Unit test for City class."""
-
 import unittest
-
 from models.city import City
+import datetime
 
-from models.base_model import BaseModel
 
-class VerifyCity(unittest.TestCase):
-"""Test cases for City class."""
-def test_is_instance(self):
-    """Check if the city is an instance of City."""
-    city = City()
-    self.assertIsInstance(city, City)
+class TestCity(unittest.TestCase):
 
-def test_type(self):
-    """Verify that city is of the correct class type."""
-    city = City()
-    self.assertEqual(str(type(city)), "<class 'models.city.City'>")
+    def setUp(self):
+        self.test_model1 = City()
+        self.test_model2 = City()
 
-def test_is_subclass(self):
-    """Check if the city is a subclass of BaseModel."""
-    city = City()
-    self.assertTrue(issubclass(type(city), BaseModel))
+    def test_basic_setup(self):
+    
+        self.assertTrue(hasattr(self.test_model1, "state_id"))
+        self.assertTrue(hasattr(self.test_model1, "name"))
+        self.assertTrue(self.test_model1.id != self.test_model2.id)
 
-def test_name_attribute(self):
-    """Check if the city's name attribute is empty string."""
-    city = City()
-    self.assertEqual(city.name, "")
+    def test_types(self):
+    
+        self.assertTrue(type(self.test_model1.state_id) is str)
+        self.assertTrue(type(self.test_model1.name) is str)
 
-def test_state_id_attribute(self):
-    """Check if the city's state_id attribute is empty string."""
-    city = City()
-    self.assertEqual(city.state_id, "")
-    if name == "main":
-unittest.main()
+    def test_save(self):
+    
+        m1u = self.test_model1.updated_at
+        self.test_model1.save()
+        m1u_saved = self.test_model1.updated_at
+        self.assertFalse(m1u == m1u_saved)
+
+if __name__ == '__main__':
+    unittest.main()
