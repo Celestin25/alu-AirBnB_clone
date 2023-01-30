@@ -1,35 +1,39 @@
 #!/usr/bin/python3
-
-"""Unit testing for the Review class."""
-
 import unittest
-
 from models.review import Review
-from models.base_model import BaseModel
+import datetime
+
 
 class TestReview(unittest.TestCase):
-"""Test cases for the Review class."""
-def test_instance_creation(self):
-    """Tests if an instance of the class can be created."""
-    review = Review()
-    self.assertIsInstance(review, Review)
 
-def test_class_type(self):
-    """Tests if the object created is of the correct class type."""
-    review = Review()
-    self.assertEqual(str(type(review)), "<class 'models.review.Review'>")
+    def setUp(self):
+    
+        self.test_model1 = Review()
+        self.test_model2 = Review()
 
-def test_inheritance(self):
-    """Tests if the class inherits from the BaseModel class."""
-    review = Review()
-    self.assertTrue(issubclass(type(review), BaseModel))
+    def test_basic_setup(self):
+    
+        self.assertTrue(hasattr(self.test_model1, "place_id"))
+        self.assertTrue(hasattr(self.test_model1, "user_id"))
+        self.assertTrue(hasattr(self.test_model1, "text"))
+        self.assertTrue(self.test_model1.id != self.test_model2.id)
+        m1c = self.test_model1.place_id
+        m2c = self.test_model2.place_id
+        self.assertTrue(m1c == m2c)
+        self.assertTrue(type(m1c) is str)
 
-def test_attributes(self):
-    """Tests if the class has the correct attributes."""
-    review = Review()
-    self.assertIsNotNone(review.id)
-    self.assertEqual(review.text, "")
-    self.assertEqual(review.user_id, "")
-    self.assertEqual(review.place_id, "")
-    if name == "main":
-unittest.main()
+    def test_types(self):
+    
+        self.assertTrue(type(self.test_model1.place_id) is str)
+        self.assertTrue(type(self.test_model1.user_id) is str)
+        self.assertTrue(type(self.test_model1.text) is str)
+
+    def test_save(self):
+    
+        m1u = self.test_model1.updated_at
+        self.test_model1.save()
+        m1u_saved = self.test_model1.updated_at
+        self.assertFalse(m1u == m1u_saved)
+
+if __name__ == '__main__':
+    unittest.main()
