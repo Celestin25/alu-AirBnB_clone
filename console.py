@@ -1,17 +1,25 @@
 #!/usr/bin/python3
 """
-This module contains the 'hbnb' class for the command interpreter.
+This module contains the hbnb class for the command interpreter.
 """
 import cmd
 import sys
 import models
 
 class hbnb(cmd.Cmd):
-"""The 'hbnb' class, derived from 'cmd.Cmd', with the following features:
-- A prompt
-- Eight methods: 'quit', 'EOF', 'emptyLine', 'create', 'show', 'destroy', 'all', 'update'
-- error messages stored in 'errors' dictionary
-- list of available classes in 'new_class'
+"""
+hbnb class inherits from cmd.Cmd and contains the following variables and methods:
+- prompt: the prompt for the command interpreter
+- obj: all objects stored in the storage
+- errors: a dictionary of error messages
+- new_class: list of new class types
+- do_quit: quits the program
+- do_EOF: exits the program
+- emptyline: prevents repetition of previous input
+- do_create: creates a new instance and saves it to the JSON file
+- do_show: prints the string representation of an instance
+- do_destroy: deletes an instance based on its class and ID
+- do_all: prints string representation of all instances based on class
 """
 prompt = '(hbnb) '
 obj = models.storage.all()
@@ -25,60 +33,49 @@ errors = {
 }
 new_class = ['BaseModel', 'Amenity', 'City', 'Place', 'Review',
 'State', 'User']
-def do_quit(self, arg):
-    '''Exit the program.'''
+def do_quit(self, args):
+    '''Quits the program.'''
     return True
 
-def do_EOF(self, arg):
-    '''Exit the program.'''
+def do_EOF(self, args):
+    '''Exits the program.'''
     return True
 
 def emptyline(self):
-    '''Avoid repeating previous input.'''
+    '''Prevents repetition of previous input.'''
     pass
 
-def do_create(self, arg):
-    '''Create a new instance of specified class and save it to JSON file.'''
-    args = arg.split()
-    if not args:
+def do_create(self, args):
+    '''Creates a new instance and saves it to the JSON file.'''
+    args = args.split()
+    if len(args) < 1:
         print(self.errors['noclass'])
-    elif args[0] in self.new_class:
-        new = getattr(models, args[0])()
-        new.save()
-        print('{}'.format(new.id))
-    else:
+        return
+    class_name = args[0]
+    if class_name not in self.new_class:
         print(self.errors['badclass'])
+        return
+    new_obj = None
+    if class_name == 'BaseModel':
+        new_obj = models.BaseModel()
+    elif class_name == 'Amenity':
+        new_obj = models.Amenity()
+    elif class_name == 'City':
+        new_obj = models.City()
+    elif class_name == 'Place':
+        new_obj = models.Place()
+    elif class_name == 'Review':
+        new_obj = models.Review()
+    elif class_name == 'State':
+        new_obj = models.State()
+    elif class_name == 'User':
+        new_obj = models.User()
+    new_obj.save()
+    print('{}'.format(new_obj.id))
 
-def do_show(self, arg):
-    '''Show the string representation of an instance with given class and id.'''
-    args = arg.split()
-
-    if not args:
+def do_show(self, args):
+    '''Prints the string representation of an instance.'''
+    args = args.split()
+    if len(args) < 1:
         print(self.errors['noclass'])
-    elif args[0] not in self.new_class:
-        print(self.errors['badclass'])
-    elif len(args) < 2:
-        print(self.errors['noid'])
-    else:
-        models.storage.reload()
-        instances = models.storage.all()
-        if args[1] not in instances:
-            print(self.errors['badid'])
-        else:
-            instance = instances[args[1]]
-            if args[0] in str(instance):
-                print(instance)
-
-def do_destroy(self, arg):
-    '''Delete an instance with given class and id.'''
-    args = arg.split()
-
-    if not args:
-        print(self.errors['noclass'])
-    elif args[0] not in self.new_class:
-        print(self.errors['badclass'])
-    elif len(args) < 2:
-        print(self.errors['noid'])
-    else:
-        models.storage.reload()
-        instances =
+        return
