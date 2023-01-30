@@ -1,11 +1,17 @@
 #!/usr/bin/python3
+"""
+This is the 'console' module.
+console contains the 'hbnb' class, which inherits from the 'cmd.Cmd' class.
+This contains the entry point for the command interpreter.
+"""
 import cmd
 import sys
 import models
 
 
 class hbnb(cmd.Cmd):
-       prompt = '(hbnb) '
+
+    prompt = '(hbnb) '
     obj = models.storage.all()
     errors = {
         "badid": "** no instance found **",
@@ -19,18 +25,19 @@ class hbnb(cmd.Cmd):
                  'State', 'User']
 
     def do_quit(self, arg):
-     
+    
         return True
 
     def do_EOF(self, arg):
+    
         return True
 
     def emptyline(self):
-        
+    
         pass
 
     def do_create(self, arg):
-       
+    
         args = arg.split()
         if len(args) < 1:
             print(self.errors['noclass'])
@@ -55,7 +62,8 @@ class hbnb(cmd.Cmd):
             print(self.errors['badclass'])
 
     def do_show(self, arg):
-               args = arg.split()
+    
+        args = arg.split()
 
         if (len(args) == 0):
             print(self.errors['noclass'])
@@ -76,7 +84,8 @@ class hbnb(cmd.Cmd):
                             break
 
     def do_destroy(self, arg):
-                args = arg.split()
+        
+        args = arg.split()
 
         if (len(args) == 0):
             print(self.errors['noclass'])
@@ -97,7 +106,8 @@ class hbnb(cmd.Cmd):
                             models.storage.save()
 
     def do_all(self, arg):
-               our_list = []
+    
+        our_list = []
         args = arg.split()
 
         if len(args) > 0:
@@ -109,7 +119,8 @@ class hbnb(cmd.Cmd):
             else:
                 print(self.errors['badclass'])
     def do_update(self, arg):
-               args = arg.split()
+        '''Updates an instance by adding or updating attribute'''
+        args = arg.split()
         new_dict = models.storage.all()
 
         if len(args) == 0:
