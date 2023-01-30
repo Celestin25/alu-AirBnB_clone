@@ -1,54 +1,47 @@
 #!/usr/bin/python3
-
-"""Unit tests for Place class"""
-
 import unittest
-
-from place_model import Place
-from city_model import City
-from user_model import User
-
-from base_model import BaseModel
+from models.place import Place
+import datetime
 
 
-class TestPlaceMethods(unittest.TestCase):
-    """Test cases for Place class"""
+class TestPlace(unittest.TestCase):
 
-    def test_place_instance(self):
-        """Test creating an instance of Place"""
-        test_place = Place()
-        self.assertIsInstance(test_place, Place)
+    def setUp(self):
+    
+        self.test_model1 = Place()
+        self.test_model2 = Place()
 
-    def test_place_class(self):
-        """Test if the instance is of the Place class"""
-        test_place = Place()
-        self.assertEqual(str(type(test_place)), "<class 'place_model.Place'>")
+    def test_basic_setup(self):
+    
+        self.assertTrue(hasattr(self.test_model1, "name"))
+        self.assertTrue(hasattr(self.test_model1, "city_id"))
+        self.assertTrue(hasattr(self.test_model2, "user_id"))
+        self.assertTrue(hasattr(self.test_model1, "number_rooms"))
+        self.assertTrue(hasattr(self.test_model1, "number_bathrooms"))
+        self.assertTrue(hasattr(self.test_model2, "latitude"))
+        self.assertTrue(hasattr(self.test_model1, "amenities"))
+        self.assertTrue(hasattr(self.test_model1, "latitude"))
+        self.assertTrue(self.test_model1.id != self.test_model2.id)
 
-    def test_place_subclass(self):
-        """Test if Place is a subclass of BaseModel"""
-        test_place = Place()
-        self.assertTrue(issubclass(type(test_place), BaseModel))
+    def test_types(self):
+        self.assertTrue(type(self.test_model1.amenities) is str)
+        self.assertTrue(type(self.test_model1.name) is str)
+        self.assertTrue(type(self.test_model1.city_id) is str)
+        self.assertTrue(type(self.test_model1.user_id) is str)
+        self.assertTrue(type(self.test_model1.description) is str)
+        self.assertTrue(type(self.test_model1.number_rooms) is int)
+        self.assertTrue(type(self.test_model1.number_bathrooms) is int)
+        self.assertTrue(type(self.test_model1.max_guest) is int)
+        self.assertTrue(type(self.test_model1.price_by_night) is int)
+        self.assertTrue(type(self.test_model1.longitude) is float)
+        self.assertTrue(type(self.test_model1.latitude) is float)
 
-    def test_place_attributes(self):
-        """Test place attributes"""
-        test_city = City()
-        test_user = User()
-        test_place = Place()
-        test_place.user_id = test_user.id
-        test_place.city_id = test_city.id
-        self.assertIsNotNone(test_place.id)
-        self.assertEqual(test_place.user_id, test_user.id)
-        self.assertEqual(test_place.city_id, test_city.id)
-        self.assertEqual(test_place.name, "")
-        self.assertEqual(test_place.description, "")
-        self.assertEqual(test_place.number_rooms, 0)
-        self.assertEqual(test_place.number_bathrooms, 0)
-        self.assertEqual(test_place.max_guest, 0)
-        self.assertEqual(test_place.price_by_night, 0)
-        self.assertEqual(test_place.latitude, 0)
-        self.assertEqual(test_place.longitude, 0)
-        self.assertEqual(test_place.amenity_ids, [])
+    def test_save(self):
+    
+        m1u = self.test_model1.updated_at
+        self.test_model1.save()
+        m1u_saved = self.test_model1.updated_at
+        self.assertFalse(m1u == m1u_saved)
 
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
