@@ -1,12 +1,14 @@
 #!/usr/bin/python3
-from models.base_model import BaseModel
+"""describes city"""
+
+from models.base_model import Basemodel
 
 
-class City(BaseModel):
+class City(Basemodel):
+    """ describe a city your searching"""
 
-    state_id = ''
-    name = ''
+    state_id = ""
+    name = ""
 
     def __init__(self, *args, **kwargs):
-    
         super().__init__(*args, **kwargs)

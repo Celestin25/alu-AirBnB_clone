@@ -1,11 +1,12 @@
 #!/usr/bin/python3
-from models.base_model import BaseModel
+"""describes a state"""
+from models.base_model import Basemodel
 
 
-class State(BaseModel):
+class State(Basemodel):
+    """ to create a state"""
 
-    name = ''
+    name = ""
 
     def __init__(self, *args, **kwargs):
-    
         super().__init__(*args, **kwargs)
