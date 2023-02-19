@@ -1,61 +1,213 @@
 #!/usr/bin/python3
-"""Defines BaseModel class."""
-import models
-from uuid import uuid4
+
+
+
+
+"""
+
+
+   Contains the definition of the BaseModel class thst defines all common
+
+
+   attributes and methods for other classes in the AirBnB clone project.
+
+
+"""
+
+
+import uuid
+
+
 from datetime import datetime
 
 
-class BaseModel:
-    """
-        Class Base
-        Defines all common attributes/methods for other classes
-        Attr :
-                id: string - assigned with an uuid when an instance is created
-                created_at: datetime - assigned with the current datetime
-                when an instance is created
-                updated_at: datetime - assigned with the current datetime
-                when an instance is created.
-                It will be updated every time the object change.
-    """
+import models
 
-    def __init__(self, *args, **kwargs):
-        """Initialize new BaseModel."""
 
-        tform = "%Y-%m-%dT%H:%M:%S.%f"
 
-        self.id = str(uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
 
-        if kwargs:
-            kwargs["created_at"] = datetime.strptime(
-                kwargs["created_at"], tform)
-            kwargs["updated_at"] = datetime.strptime(
-                kwargs["updated_at"], tform)
-            del kwargs["__class__"]
-            self.__dict__.update(kwargs)
-        else:
-            self.id = str(uuid4())
-            self.created_at = datetime.now()
-            self.updated_at = datetime.now()
-            models.storage.new(self)
 
-    def save(self):
-        """Set updated_at with current datetime."""
-        self.updated_at = datetime.now()
-        models.storage.save()
 
-    def to_dict(self):
-        """Return dictionary of BaseModel instance.
-        Includes key/value pair __class__.
-        """
-        rdict = self.__dict__.copy()
-        rdict["created_at"] = self.created_at.isoformat()
-        rdict["updated_at"] = self.updated_at.isoformat()
-        rdict["__class__"] = self.__class__.__name__
-        return rdict
 
-    def __str__(self):
-        """Return print/str representation of BaseModel instance."""
-        clname = self.__class__.__name__
-        return "[{}] ({}) {}".format(clname, self.id, self.__dict__)
+
+
+
+
+
+class BaseModel():
+
+
+   """Definition of the class BaseModel. Defines all common attributes and
+
+
+      methods for other classes in the AirBnB project
+
+
+   """
+
+
+   def __init__(self, *args, **kwargs):
+
+
+       """Initialize a new instance of the BaseModel class.
+
+
+          Also recreate a class instance from a dictiornary.
+
+
+       Attributes:
+
+
+           id (str) - a unique identification number for each class instance
+
+
+           created_at (datetime) - a datetime object indicating the date
+
+
+                                   and time the instance was created
+
+
+           updated_at (datetime) - a datetime object that is updated every
+
+
+                                   time the instance object is modified
+
+
+       """
+
+
+       if kwargs:
+
+
+           dt = kwargs['updated_at']
+
+
+           fmt = "%Y-%m-%dT%H:%M:%S.%f"
+
+
+           self.updated_at = datetime.strptime(dt, fmt)
+
+
+           dt = kwargs['created_at']
+
+
+           self.created_at = datetime.strptime(dt, fmt)
+
+
+           not_use = ["created_at", "__class__", "updated_at"]
+
+
+           for key, value in kwargs.items():
+
+
+               if key not in not_use:
+
+
+                   self.__setattr__(key, value)
+
+
+       else:
+
+
+           self.id = str(uuid.uuid4())
+
+
+           self.created_at = datetime.now()
+
+
+           self.updated_at = datetime.now()
+
+
+           models.storage.new(self)
+
+
+
+
+
+
+
+   def __str__(self):
+
+
+       """Returns a string representation of a class instance in the required
+
+
+          format
+
+
+       """
+
+
+       return "[{}] ({}) {}".format(self.__class__.__name__, self.id,
+
+
+                                    self.__dict__)
+
+
+
+
+
+
+
+   def save(self):
+
+
+       """Updates the public instance attribute updated_at with the current
+
+
+          datetime
+
+
+       """
+
+
+       self.updated_at = datetime.now()
+
+
+       models.storage.save()
+
+
+
+
+
+
+
+   def to_dict(self):
+
+
+       """Returns a dictionary containing all the relevant key/value pairs of
+
+
+          an instance, including:
+
+
+               - all key/value pairs from the __dict__ of the instance
+
+
+                   - the created_at and updated_at attributes in string format
+
+
+                     i.e (year-month-day T hour.minute.second.microsecond
+
+
+               - a key __class__ whose value is the class of the instance
+
+
+       """
+
+
+       inst_dict = {key: value for key, value in self.__dict__.items()}
+
+
+       inst_dict["created_at"] = self.created_at.isoformat()
+
+
+       inst_dict["updated_at"] = self.updated_at.isoformat()
+
+
+       inst_dict["__class__"] = self.__class__.__name__
+
+
+       return inst_dict
+
+
